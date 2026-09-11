@@ -26,7 +26,7 @@ set -e
 # Get build information
 COMMIT_HASH=$(git rev-parse --short HEAD)
 BUILD_DATE=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
-API_HOST=$(cat .env 2>/dev/null | grep API_HOST | cut -d '=' -f 2 || echo "")
+API_HOST=$(grep '^API_HOST=' .env 2>/dev/null | cut -d '=' -f 2-)
 
 copy_assets() {
     local APP_NAME=$1
@@ -90,7 +90,7 @@ else
     # Rename arch build to plain Finicky.app
     build_arch arm64
 
-    rm -r apps/finicky/build/${APP_NAME}
+    rm -rf apps/finicky/build/${APP_NAME}
     mv apps/finicky/build/Finicky-arm64.app apps/finicky/build/${APP_NAME}
     copy_assets ${APP_NAME}
 
